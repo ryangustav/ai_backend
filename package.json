@@ -1,0 +1,24 @@
+{
+  "name": "ia_backend",
+  "version": "1.0.0",
+  "main": "main.js",
+  "scripts": {
+    "dev": "nodemon ."
+  },
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "devDependencies": {
+    "nodemon": "^3.1.9"
+  },
+  "dependencies": {
+    "@google/generative-ai": "^0.21.0",
+    "@types/node": "^22.10.3",
+    "bcrypt": "^5.1.1",
+    "dotenv": "^16.4.7",
+    "email-validator": "^2.0.4",
+    "express": "^4.21.2",
+    "mongodb": "^6.12.0",
+    "mongoose": "^8.9.3"
+  }
+}
