@@ -44,28 +44,40 @@ class UserController {
     }
 
     async login(req, res) {
-
-    //Requirements
-    const body = req.body;
-    const user = await UserSchema.findOne({ email: body.email });
-    
-    //Validating
-    if (!user) {
-    res.status(401)
-    res.json({ code: 401, message: `This user doesn't exists`})
-    return;
-    }
-
-    await bcrypt.compare(body.password, user.password, function(err, result) {
-    if (result === false) {
-    res.status(401)
-    res.json({ code: 401, message: "Invalid password"})
-    }
-    });
-
-    res.status(200)
-    res.json({ code: 200, message: `Logged in ${user.username} account`, id: user.id, username: user.username, chats: user.chats})
-    }
+        try {
+          const body = req.body;
+          const user = await UserSchema.findOne({ email: body.email });
+      
+          // Validating if user exists
+          if (!user) {
+            return res.status(401).json({ code: 401, message: "This user doesn't exist" });
+          }
+      
+          // Comparing password
+          bcrypt.compare(body.password, user.password, function (err, result) {
+            if (err) {
+              return res.status(500).json({ code: 500, message: "Error comparing password" });
+            }
+      
+            if (result === false) {
+              return res.status(401).json({ code: 401, message: "Invalid password" });
+            }
+      
+            // If password matches, send success response
+            return res.status(200).json({
+              code: 200,
+              message: `Logged in to ${user.username} account`,
+              id: user.id,
+              username: user.username,
+              chats: user.chats,
+            });
+          });
+        } catch (error) {
+          console.error(error);
+          return res.status(500).json({ code: 500, message: "Internal server error" });
+        }
+      }
+      
 }
 
 module.exports = UserController;
